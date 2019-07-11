@@ -10,12 +10,12 @@ class Myr {
         this.els = [];
         this.assets = [];
         this.res = { els: this.els, assets: this.assets };
-        this.color = "red";
+        this.color = "blue";
         this.sceneEl = document.querySelector("a-scene");
         this.position = {
-            x: 0,
-            y: 0,
-            z: 0
+            x: 1,
+            y: 1,
+            z: 1
         };
         this.scale = {
             x: 1,
@@ -27,14 +27,14 @@ class Myr {
             y: 0,
             z: 0
         };
-        this.radius = "1";
-        this.phiLength = 360;
-        this.loop = true;
-        this.duration = 1000;
+        this.radius = "4";
+        this.phiLength = 100;
+        this.loop = false;
+        this.duration = 2000;
         this.magnitude = {
-            spin: 360,
-            fadeOut: 0,
-            general: 1
+            spin: 100,
+            fadeOut: 1,
+            general: 1,
         };
         if (baseEls) {
             Object.keys(this.baseEls).forEach(it => {

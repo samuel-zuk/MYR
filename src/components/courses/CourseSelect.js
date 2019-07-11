@@ -31,11 +31,11 @@ function getModalStyle() {
 const modelStyles = theme => ({
     paper: {
         position: "absolute",
-        width: theme.spacing.unit * 100,
-        maxWidth: "90%",
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing.unit * 4,
+        with: theme.spacing.unit * 100,
+        maidth: "90%",
+        backgroundMeme: theme.palette.background.paper,
+        bxShadow: theme.shadows[5],
+        dding: theme.spacing.unit * 4,
     },
     button: {
         margin: theme.spacing.unit,
