@@ -128,6 +128,7 @@ class Myr {
         } else {
             console.error("setPosition() must be all numeric values");
         }
+        return { x: this.position.x, y: this.position.y, z: this.position.z };
     };
 
     setXPos = (x = 0) => {
@@ -136,6 +137,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setXPos");
         }
+        return this.position.x;
     };
 
     setYPos = (y = 0) => {
@@ -144,6 +146,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setYPos");
         }
+        return this.position.y;
     };
 
     setZPos = (z = 0) => {
@@ -152,6 +155,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setZPos");
         }
+        return this.position.z;
     };
 
     increasePosition = (x = 0, y = 0, z = 0) => {
@@ -218,6 +222,7 @@ class Myr {
         } else {
             console.error("setScale() must be all numeric values");
         }
+        return { x: this.scale.x, y: this.scale.y, z: this.scale.z };
     };
 
     setXScale = (x) => {
@@ -226,6 +231,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setXScale");
         }
+        return this.scale.x;
     };
 
     setYScale = (y) => {
@@ -234,6 +240,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setYScale");
         }
+        return this.scale.y;
     };
 
     setZScale = (z) => {
@@ -242,6 +249,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setZScale");
         }
+        return this.scale.z;
     };
 
     setRotation = (x, y = 0, z = 0) => {
@@ -254,6 +262,7 @@ class Myr {
         } else {
             console.error("setRotation() must be all numeric values");
         }
+        return { x: this.rotation.x, y: this.rotation.y, z: this.rotation.z };
     }
 
     pitchX = (x) => {
@@ -262,6 +271,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for pitchX");
         }
+        return this.rotation.x;
     };
 
     yawY = (y) => {
@@ -270,6 +280,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for yawY");
         }
+        return this.rotation.y;
     };
 
     rollZ = (z) => {
@@ -278,6 +289,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for rollZ");
         }
+        return this.rotation.z;
     };
 
     setRadius = (i) => {
@@ -286,6 +298,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setRadius");
         }
+        return this.radius;
     };
 
     setPhiLength = (i) => {
@@ -294,10 +307,12 @@ class Myr {
         } else {
             console.error("must pass a numeric for setPhiLength");
         }
+        return this.phiLength;
     };
 
     setLoop = (i) => {
         this.loop = Boolean(i);
+        return this.loop;
     };
 
     setMagnitude = (i) => {
@@ -310,6 +325,7 @@ class Myr {
         } else {
             console.error("must pass a numeric for setMagnitude");
         }
+        return this.magnitude.general;
     };
 
     setDuration = (i) => {
@@ -318,20 +334,28 @@ class Myr {
         } else {
             console.error("must pass a numeric for setDuration");
         }
+        return this.duration;
     };
 
     setColor = (color) => {
         this.color = color;
+        return this.color;
     }
 
-    getRandomColor = () => {
-        let color, i, letters;
-        letters = "0123456789ABCDEF";
-        color = "#";
-        i = 0;
-        while (i < 6) {
-            color += letters[Math.floor(Math.random() * 16)];
-            i++;
+    getRandomColor = (colors = null) => {
+        let color;
+        if (Array.isArray(colors) && colors.length !== 0) {
+            color = colors[Math.floor(Math.random() * colors.length)];
+        }
+        else {
+            let i, letters;
+            letters = "0123456789ABCDEF";
+            color = "#";
+            i = 0;
+            while (i < 6) {
+                color += letters[Math.floor(Math.random() * 16)];
+                i++;
+            }
         }
         this.color = color;
         return color;
@@ -623,9 +647,12 @@ class Myr {
     * Instead we pass it and then pull it off again if we see it.
     */
     text = (text, params) => {
+        if (typeof text !== "string") {
+            text = "Default";
+        }
         let base = {
             text: true,
-            value: text || "Default",
+            value: text,
             id: "txt" + this.genNewId(),
             side: "double",
             color: this.color,
@@ -722,9 +749,9 @@ class Myr {
 
     // Animate the Aframe element which is passed as arg
     animate = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.spin;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.spin;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: rotation;
@@ -738,9 +765,9 @@ class Myr {
     };
 
     spin = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.spin;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.spin;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: rotation;
@@ -755,9 +782,9 @@ class Myr {
     };
 
     yoyo = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -771,9 +798,9 @@ class Myr {
     };
 
     sideToSide = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         dir: alternate;
@@ -788,9 +815,9 @@ class Myr {
     };
 
     goUp = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -804,9 +831,9 @@ class Myr {
     };
 
     goDown = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -820,9 +847,9 @@ class Myr {
     };
 
     goLeft = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -836,9 +863,9 @@ class Myr {
     };
 
     goRight = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -852,9 +879,9 @@ class Myr {
     };
 
     goTowards = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -868,9 +895,9 @@ class Myr {
     };
 
     goAway = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: position;
@@ -884,9 +911,9 @@ class Myr {
     };
 
     grow = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: scale;
@@ -900,9 +927,9 @@ class Myr {
     };
 
     shrink = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: scale;
@@ -916,9 +943,9 @@ class Myr {
     };
 
     fadeOut = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.fadeOut;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.fadeOut;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: components.material.material.opacity;
@@ -935,9 +962,9 @@ class Myr {
     }
 
     fadeIn = (outerElId, magnitude = null, loop = null, duration = null) => {
-        magnitude = magnitude != null ? magnitude : this.magnitude.general;
-        loop = loop != null ? loop : this.loop;
-        duration = duration != null ? duration : this.duration;
+        magnitude = magnitude !== null ? magnitude : this.magnitude.general;
+        loop = loop !== null ? loop : this.loop;
+        duration = duration !== null ? duration : this.duration;
         let el = this.getEl(outerElId);
         let anim = `
         property: components.material.material.opacity;
@@ -1144,6 +1171,44 @@ class Myr {
         // console.log(this);
         // console.log("Halted");
     }
+
+    infiniteLoopDetector = (function () {
+        let map = {};
+
+        // define an InfiniteLoopError class
+        function InfiniteLoopError(msg) {
+            Error.call(this, msg);
+            this.type = "InfiniteLoopError";
+        }
+
+        function infiniteLoopDetector(id) {
+            if (id in map) {
+                if (Date.now() - map[id] > 200) {
+                    delete map[id];
+                    throw new Error("Loop runing too long!", InfiniteLoopError);
+                }
+            } else {
+                map[id] = Date.now();
+            }
+        }
+
+        infiniteLoopDetector.wrap = function (codeStr) {
+            if (typeof codeStr !== "string") {
+                throw new Error("Input type must be a string");
+            }
+            // this is not a strong regex, but enough to use at the time
+            return codeStr.replace(/for *\(.*\{|while *\(.*\{|do *\{/g, function (loopHead) {
+                let id = parseInt(Math.random() * Number.MAX_SAFE_INTEGER);
+                return `infiniteLoopDetector(${id});${loopHead}infiniteLoopDetector(${id});`;
+            });
+        };
+
+        infiniteLoopDetector.unwrap = function (codeStr) {
+            return codeStr.replace(/infiniteLoopDetector\([0-9]*?\);/g, "");
+        };
+
+        return infiniteLoopDetector;
+    }());
 }
 
 export default Myr;

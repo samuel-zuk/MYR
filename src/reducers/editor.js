@@ -31,7 +31,10 @@ m.init();
 // ESLint doesn't like this but it is better than eval
 function noEvalEvaluation(text) {
     // eslint-disable-next-line
-    return Function(`'use strict'; ${text}`)();
+    // let func = Function(`'use strict'; ${m.infiniteLoopDetector.wrap(text)}`);
+    // eslint-disable-next-line
+    let func = Function(`'use strict'; ${text}`);
+    return func;
 }
 
 export default function editor(state = initial_state, action) {
@@ -54,7 +57,12 @@ export default function editor(state = initial_state, action) {
             };
 
             try {
+<<<<<<< HEAD
                 noEvalEvaluation(action.text);
+=======
+                let func = noEvalEvaluation(action.text);
+                func();
+>>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
             }
             catch (err) {
                 // Notify that eval failed

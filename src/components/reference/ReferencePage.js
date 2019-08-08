@@ -1,5 +1,6 @@
 import React from "react";
 import myrReference from "../../myr/reference";
+import * as refFunctions from "../../myr/reference";
 
 import {
     Tabs,
@@ -11,6 +12,7 @@ import {
     TableHead,
     TableRow,
     TableCell,
+    Hidden,
 } from "@material-ui/core";
 
 import "../../css/ReferencePage.css";
@@ -44,7 +46,27 @@ export default class Reference extends React.Component {
         } else {
             return null;
         }
-    }
+    };
+
+    nameHelper = (name, parameters) => {
+        return (
+            <span>{name}({(parameters.map((element, i, params) => {
+                let comma = i < params.length - 1 ? ", " : "";
+                switch (element.type) {
+                    case "number":
+                        return <span>{refFunctions.numberText(element.name)}{comma}</span>;
+                    case "string":
+                        return <span>{refFunctions.stringText(element.name)}{comma}</span>;
+                    case "bool":
+                        return <span>{refFunctions.boolText(element.name)}{comma}</span>;
+                    case "array":
+                        return <span>{refFunctions.arrayText(element.name)}{comma}</span>;
+                    default:
+                        return null;
+                }
+            }))});</span>
+        );
+    };
 
     TableEx = (category) => {
 
@@ -60,7 +82,7 @@ export default class Reference extends React.Component {
                 <TableBody  >
                     {this.tableData[category].map((row, index) => (
                         <TableRow key={index}>
-                            <TableCell >{row.name}</TableCell>
+                            <TableCell >{this.nameHelper(row.name, row.parameters)}</TableCell>
                             <TableCell >{row.description}</TableCell>
                             <TableCell >{this.exampleHelper(row.example)}</TableCell>
                         </TableRow>
@@ -80,19 +102,35 @@ export default class Reference extends React.Component {
                     onChange={this.handleChange} >
                     <Tab
                         icon={<Icon className="material-icons geometry">category</Icon>}
-                        label="GEOMETRY"
+                        label={
+                            <Hidden xsDown>
+                                <div>GEOMETRY</div>
+                            </Hidden>
+                        }
                         value='a' />
                     <Tab
                         icon={<Icon className="material-icons color-change">bubble_chart</Icon>}
-                        label="TRANSFORMATIONS"
+                        label={
+                            <Hidden xsDown>
+                                <div>TRANSFORMATIONS</div>
+                            </Hidden>
+                        }
                         value='b' />
                     <Tab
                         icon={<Icon className="material-icons animation-ref">zoom_out_map</Icon>} //swap_horiz control_camera category
-                        label="ANIMATIONS"
+                        label={
+                            <Hidden xsDown>
+                                <div>ANIMATIONS</div>
+                            </Hidden>
+                        }
                         value='c' />
                     <Tab
                         icon={<Icon className="material-icons geometry">widgets</Icon>}
-                        label="GROUPS"
+                        label={
+                            <Hidden xsDown>
+                                <div>GROUPS</div>
+                            </Hidden>
+                        }
                         value='d' />
                 </Tabs>
                 {<div style={{ margin: 5 }}>

@@ -1,3 +1,5 @@
+import myrReference from "../../myr/reference.js";
+
 export const customCompleter = {
     getCompletions: function (editor, session, pos, prefix, callback) {
         let BasicAutocompleteKeyWords = [
@@ -32,6 +34,7 @@ export const customCompleter = {
             "static"
         ];
 
+<<<<<<< HEAD
         let keyWords = [
             "box()",
             "sphere()",
@@ -113,6 +116,13 @@ export const customCompleter = {
             "getDuration()",
             "getMagnitude()",
 
+=======
+        let reference = myrReference();
+        let keyWords = [...reference.geometry.map(obj => obj.name + "()"),
+            ...reference.transformations.map(obj => obj.name + "()"),
+            ...reference.animations.map(obj => obj.name + "()"),
+            "group()"
+>>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
         ];
 
         let Colors = [
