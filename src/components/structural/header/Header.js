@@ -175,19 +175,6 @@ class Header extends Component {
         }
     }
 
-<<<<<<< HEAD
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        if (nextProps.scene && nextProps.scene.name) {
-            this.setState({ sceneName: nextProps.scene.name });
-        }
-
-        if (nextProps.scene && nextProps.scene.desc) {
-            this.setState({ sceneDesc: nextProps.scene.desc });
-        }
-    }
-
-=======
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
     /**
     * @summary - Removes listener for real time sync process
     */

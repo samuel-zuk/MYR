@@ -57,12 +57,8 @@ export default function editor(state = initial_state, action) {
             };
 
             try {
-<<<<<<< HEAD
-                noEvalEvaluation(action.text);
-=======
                 let func = noEvalEvaluation(action.text);
                 func();
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
             }
             catch (err) {
                 // Notify that eval failed
