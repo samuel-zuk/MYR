@@ -4,12 +4,8 @@ import {
     Button,
     Icon,
     IconButton,
-<<<<<<< HEAD
-    Modal
-=======
     Modal,
     Hidden
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
 } from "@material-ui/core";
 
 import WelcomeScene from "./WelcomeScene.js";
@@ -82,13 +78,8 @@ class Welcome extends React.Component {
         }
     }
 
-<<<<<<< HEAD
-    getCookie = (cname) => {
-        let name = cname + "=";
-=======
     getCookie = (cookieName) => {
         let name = cookieName + "=";
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
         let decodedCookie = decodeURIComponent(document.cookie);
         let ca = decodedCookie.split(";");
         for (let i = 0; i < ca.length; i++) {
@@ -242,15 +233,12 @@ class Welcome extends React.Component {
         );
     }
 
-<<<<<<< HEAD
-=======
     cookieMessage = () => {
         return (
             <p id="cookie-consent" className="text-center">MYR uses cookies which are necessary for its functioning. You accept the use of cookies by continuing to use MYR per the <a href="/about/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>.</p>
         );
     }
 
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
     render() {
         const { classes } = this.props;
 
@@ -270,13 +258,10 @@ class Welcome extends React.Component {
                                 <Icon className="material-icons">close</Icon>
                             </IconButton>
                             <h3 className="text-center">Welcome to MYR!</h3>
-<<<<<<< HEAD
-=======
                             <Hidden mdUp>
                                 <hr />
                                 <this.cookieMessage />
                             </Hidden>
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
                             <hr />
                             <div className="row no-gutters">
                                 <div id="welcome-description" className="col-12 col-md-6 col-lg-8">
@@ -294,15 +279,10 @@ class Welcome extends React.Component {
                             <this.handleModals />
                             <hr />
                             <this.neverAgain />
-<<<<<<< HEAD
-                            <hr />
-                            <p id="cookie-consent" className="text-center">MYR uses cookies which are necessary for its functioning. You accept the use of cookies by continuing to use MYR per the <a href="/about/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>.</p>
-=======
                             <Hidden smDown>
                                 <hr />
                                 <this.cookieMessage />
                             </Hidden>
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
                         </div>
                     </Modal>
                 </React.Fragment>

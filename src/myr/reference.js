@@ -263,26 +263,6 @@ let transformations = [
         example: "setZPos"
     },
     {
-<<<<<<< HEAD
-        name: <span> increasePosition(<span className="number">x</span>,<span className="number">y</span>,<span className="number">z</span>)</span>,
-        description: <span>Changes the position of the cursor relative to the current position. This function takes both positive and negative values and returns the object of the current position of the cursor. </span>,
-    },
-    {
-        name: <span> increaseXPos(<span className="number">x</span>)</span>,
-        description: <span>Changes the position of the cursor along the X-axis relative to the current coordinate. This function takes both positive and negative value and returns the current X-position of the cursor. Default: 1</span>,
-    },
-    {
-        name: <span> increaseYPos(<span className="number">y</span>)</span>,
-        description: <span>Changes the position of the cursor along the Y-axis relative to the current coordinate. This function takes both positive and negative value and returns the current Y-position of the cursor. Default: 1</span>,
-    },
-    {
-        name: <span> increaseZPos(<span className="number">z</span>)</span>,
-        description: <span>Changes the position of the cursor along the Z-axis relative to the current coordinate. This function takes both positive and negative value and returns the current Z-position of the cursor. Default: 1</span>,
-    },
-    {
-        name: <span>setScale(<span className="number">x</span>,<span className="number">y</span>,<span className="number">z</span>)</span>,
-        description: <span>Sets the scale of the cursor to the given ratios. Default: (1,1,1)</span>,
-=======
         name: "increasePosition",
         parameters: [{ type: "number", name: "x" }, { type: "number", name: "y" }, { type: "number", name: "z" }],
         description: <span>The increasePosition function increases the position of the cursor, or decreases the position using negative values. This function returns the position of the cursor after it is modified. </span>,
@@ -306,7 +286,6 @@ let transformations = [
         name: "setScale",
         parameters: [{ type: "number", name: "x" }, { type: "number", name: "y" }, { type: "number", name: "z" }],
         description: <span>The setScale function changes the scale cursor component to the given ratios. Values greater than 1 make the object larger, and values between 0 and 1 make the object smaller. The default values are x:1, y:1, z:1.</span>,
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
         example: "setScale"
     },
     {

@@ -436,11 +436,7 @@ class ConfigModal extends Component {
                                 </ButtonBase >
                                 <Tabs
                                     fullWidth={false}
-<<<<<<< HEAD
-                                    value={this.state.tab}
-=======
                                     value={this.state.value}
->>>>>>> 476cef3762a7af9d36ecc153b82199b6c3c7e875
                                     onChange={this.handleChange}>
                                     <Tab
                                         label="Scene"
