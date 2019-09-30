@@ -390,6 +390,8 @@ class Myr {
         return this.cursor.phiLength;
     };
 
+    //test=()=>{console.log(this.els);};
+
     setLoop = (i) => {
         this.cursor.loop = Boolean(i);
         return this.cursor.loop;
@@ -545,10 +547,11 @@ class Myr {
         let base = {
             geometry: "primitive: box;",
             id: "box" + this.genNewId(),
-            material: `color: ${this.cursor.color};`,
+            material: `color: ${this.cursor.color}; side: double;`,
             position: { ...this.cursor.position },
             rotation: this.cursor.rotation,
             scale: this.cursor.scale,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -562,6 +565,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -575,6 +579,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -588,6 +593,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -602,6 +608,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -615,6 +622,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -628,6 +636,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -642,6 +651,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -654,6 +664,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -667,6 +678,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -679,6 +691,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -692,6 +705,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -704,6 +718,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -726,6 +741,7 @@ class Myr {
             position: this.cursor.position,
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
+            mixin: "additive-entity",
         };
         if (!params || typeof params === "string") {
             this.els[base.id] = { ...base };
@@ -743,6 +759,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -757,6 +774,7 @@ class Myr {
             material: `color: ${this.cursor.color};`,
             p: 2,
             q: 3,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -769,6 +787,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -783,6 +802,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -801,10 +821,10 @@ class Myr {
     }
 
     // Prism is an alias for Polyhedron
-    prism = this.polyhedron
+    prism = this.polyhedron;
 
     // Cube is an alias for Box
-    cube = this.box
+    cube = this.box;
 
 
     /********************* ANIMATIONS *********************/
