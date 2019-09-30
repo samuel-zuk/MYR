@@ -16,7 +16,6 @@ import * as THREE from "three";
 class View extends Component {
     constructor(props) {
         super(props);
-        this.AFRAME;
         this.state = {
             welcomeOpen: true
         };
@@ -46,37 +45,6 @@ class View extends Component {
             document.getElementById("interface").style.visibility = "visible";
         });
 
-        this.AFRAME = window.AFRAME;
-        this.AFRAME.registerGeometry("fixedSphere", {
-            schema : {
-                phiLength : {default : 360 },
-            },
-            init : (data) => {
-                let material = new THREE.MeshBasicMaterial();
-
-                let sphereGeometry = new THREE.SphereGeometry(1, 32, 32, 0, data.phiLength);
-                let sphereMesh = new THREE.Mesh(sphereGeometry, material);
-
-                let semi1Geometry = new THREE.CircleGeometry(1, 32, 0, Math.PI);
-                let semi1Mesh = new THREE.Mesh(semi1Geometry, material);         
-                semi1Mesh.rotation.z = Math.PI / 2;
-                semi1Mesh.rotation.x = Math.PI;
-
-                let semi2Geometry = new THREE.CircleGeometry(1, 32, 0, Math.PI);
-                let semi2Mesh = new THREE.Mesh(semi2Geometry, material);
-                semi2Mesh.rotation.z = Math.PI / 2;
-                semi2Mesh.rotation.y = data.phiLength;
-
-                let geometry = new THREE.Geometry();
-                sphereMesh.updateMatrix();
-                geometry.merge(sphereMesh.geometry, sphereMesh.matrix);
-                semi1Mesh.updateMatrix();
-                geometry.merge(semi1Mesh.geometry, semi1Mesh.matrix);
-                semi2Mesh.updateMatrix();
-                geometry.merge(semi2Mesh.geometry, semi2Mesh.matrix);
-                this.geometry = geometry;
-            }
-        });
     }
     // This fires off an event when the system is fully rendered.
     componentDidUpdate() {
@@ -129,7 +97,7 @@ class View extends Component {
                 scale: `${ent.scale.x || 1} ${ent.scale.y || 1} ${ent.scale.z || 1}`,
                 rotation: `${ent.rotation.x || 0} ${ent.rotation.y || 0} ${ent.rotation.z || 0}`
             };
-            let geometryProps = ent.geometry.split("; ");
+            //let geometryProps = ent.geometry.split("; ");
             // If it is group then render children then render parent
             if (ent.group) {
                 return (
@@ -145,10 +113,11 @@ class View extends Component {
             if (ent.tube) {
                 return <a-tube path={ent.path} radius={ent.radius} material={ent.material}></a-tube>;
             }
-            if (geometryProps[0] === "primitive: sphere" && geometryProps[1] !== "phi-length: 360") {
+            /*if (geometryProps[0] === "primitive: sphere" && geometryProps[1] !== "phi-length: 360") {
                 let geometry = "primitive: fixedSphere; phiLength = " + geometryProps[1].split(": ")[1];
-                return <a-entity key={ent.id} {...flattened} geometry={geometry}></a-entity>;
-            }
+                //console.log(geometry);
+                return <a-entity key={ent.id} geometry={geometry}></a-entity>;
+            }*/
             return <a-entity key={ent.id} {...flattened}></a-entity>;
         }
     }
@@ -160,6 +129,7 @@ class View extends Component {
     }
 
     createCam = () => {
+
         switch (this.props.sceneConfig.settings.camConfig) {
             case 0:
                 return this.basicMoveCam();
@@ -261,36 +231,39 @@ class View extends Component {
         /* eslint-disable */
         return (
             !this.state.welcomeOpen ?
-                <a-scene physics="debug: false; friction: 3; restitution: .3;" embedded debug="false">
-                    <a-assets>
-                        <a-mixin id="checkpoint"></a-mixin>
-                        <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
-                        <a-mixin id="additive-entity" csg-meshs="subtract: .negative" material="transparent: false; opacity 1;"></a-mixin>
-                        <a-mixin id="subtractive-entity" material="transparent: true; opacity: 0;" static-body="shape: none" csg-meshs=""></a-mixin>
-                        <a-img id="reference" src={`${process.env.PUBLIC_URL}/img/coordHelper.jpg`} />
-                        {this.props.assets ? this.props.assets.map((x) => this.assetsHelper(x)) : null}
-                    </a-assets>
-                    <this.createCam />
-                    <a-sky color={this.props.sceneConfig.settings.skyColor} />
-                    <this.coordinateHelper />
-                    <this.makeFloor />
-                    { // create the entities
-                        Object.keys(this.props.objects).map(it => {
-                            return this.helper(this.props.objects[it]);
-                        })
-                    }
+                <React.Fragment>
+                    <script src="./aframe-components/fixedSphere.js"></script>
+                    <a-scene physics="debug: false; friction: 3; restitution: .3;" embedded debug="false">
+                        <a-assets>
+                            <a-mixin id="checkpoint"></a-mixin>
+                            <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
+                            <a-mixin id="additive-entity" csg-meshs="subtract: .negative" material="transparent: false; opacity 1;"></a-mixin>
+                            <a-mixin id="subtractive-entity" material="transparent: true; opacity: 0;" static-body="shape: none" csg-meshs=""></a-mixin>
+                            <a-img id="reference" src={`${process.env.PUBLIC_URL}/img/coordHelper.jpg`} />
+                            {this.props.assets ? this.props.assets.map((x) => this.assetsHelper(x)) : null}
+                        </a-assets>
+                        <this.createCam />
+                        <a-sky color={this.props.sceneConfig.settings.skyColor} />
+                        <this.coordinateHelper />
+                        <this.makeFloor />
+                        { // create the entities
+                            Object.keys(this.props.objects).map(it => {
+                                return this.helper(this.props.objects[it]);
+                            })
+                        }
 
-                    {this.props.sceneConfig.settings.camConfig === 1 ?
-                        <a-entity position="0 0 0">
-                            <a-cylinder checkpoint radius="1" height="0.3" position="-25 1 -25" color="#39BB82"></a-cylinder>
-                            <a-cylinder checkpoint radius="1" height="0.3" position="25 1 25" color="#39BB82"></a-cylinder>
-                            <a-cylinder checkpoint radius="1" height="0.3" position="-25 1 25" color="#39BB82"></a-cylinder>
-                            <a-cylinder checkpoint radius="1" height="0.3" position="25 1 -25" color="#39BB82"></a-cylinder>
-                            <a-circle checkpoint radius="1" rotation="90 0 0" position="0 10 0" color="#39BB82"></a-circle>
-                        </a-entity>
-                        : null
-                    }
-                </a-scene>
+                        {this.props.sceneConfig.settings.camConfig === 1 ?
+                            <a-entity position="0 0 0">
+                                <a-cylinder checkpoint radius="1" height="0.3" position="-25 1 -25" color="#39BB82"></a-cylinder>
+                                <a-cylinder checkpoint radius="1" height="0.3" position="25 1 25" color="#39BB82"></a-cylinder>
+                                <a-cylinder checkpoint radius="1" height="0.3" position="-25 1 25" color="#39BB82"></a-cylinder>
+                                <a-cylinder checkpoint radius="1" height="0.3" position="25 1 -25" color="#39BB82"></a-cylinder>
+                                <a-circle checkpoint radius="1" rotation="90 0 0" position="0 10 0" color="#39BB82"></a-circle>
+                            </a-entity>
+                            : null
+                        }
+                    </a-scene>
+                </React.Fragment>
                 :
                 null
         );

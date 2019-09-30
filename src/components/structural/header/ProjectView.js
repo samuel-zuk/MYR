@@ -519,7 +519,7 @@ class Project extends React.Component {
                                         onClick={() => this.handlePwToggle()} >
                                         <Icon className="material-icons">clear</Icon>
                                     </ButtonBase >
-                                    <this.pwProtect />
+                                    {/*<this.pwProtect />*/}
                                 </div>
                             </Modal>
                         </div>
