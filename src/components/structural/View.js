@@ -19,6 +19,7 @@ class View extends Component {
         this.state = {
             welcomeOpen: true
         };
+        this.AFRAME = window.AFRAME;
     }
     intervalID = 0;
 
@@ -43,6 +44,32 @@ class View extends Component {
 
         window.addEventListener("exit-vr", () => {
             document.getElementById("interface").style.visibility = "visible";
+        });
+
+        this.AFRAME.registerGeometry("phisphere", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+        
+            init : function(data) {
+                let phi = data.phi * Math.PI / 180;
+                let sphere = new THREE.SphereGeometry(1, 18, 36, 0, phi);
+        
+                let semiStart = new THREE.CircleGeometry(1, 36, 0, Math.PI);
+                semiStart.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
+                semiStart.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
+        
+                let semiEnd = new THREE.CircleGeometry(1, 32, 0, Math.PI);
+                semiEnd.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
+                semiEnd.applyMatrix(new THREE.Matrix4().makeRotationY(phi));
+        
+                let geometry = new THREE.Geometry();
+                geometry.merge(sphere);
+                geometry.merge(semiStart);
+                geometry.merge(semiEnd);
+        
+                this.geometry = geometry;
+            }
         });
     }
     // This fires off an event when the system is fully rendered.
@@ -137,8 +164,7 @@ class View extends Component {
             <a-entity id="rig" movement-controls="controls: checkpoint" checkpoint-controls="mode: animate">
                 <a-camera
                     position={this.props.sceneConfig.settings.cameraPosition}
-                    look-controls="pointerLockEnabled: true"
-                >
+                    look-controls="pointerLockEnabled: true">
                     <a-cursor
                         position="0 0 -1"
                         geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03;"
