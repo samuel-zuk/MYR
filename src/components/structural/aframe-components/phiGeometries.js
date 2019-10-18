@@ -39,3 +39,44 @@ export function cylinder(data) {
 
     this.geometry = geometry;
 }
+
+export function torus(data) {
+    let phi = data.phi * Math.PI / 180;
+    let torusGeometry = new THREE.TorusGeometry(1, 1, 36, 32, phi);
+
+    let circleStart = new THREE.CircleGeometry(1, 32, 0, Math.PI * 2);
+    circleStart.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI / 2));
+    circleStart.applyMatrix(new THREE.Matrix4().setPosition(new THREE.Vector3(1, 0, 0)));
+
+    let circleEnd = new THREE.CircleGeometry(1, 32, 0, Math.PI * 2);
+    circleEnd.applyMatrix(new THREE.Matrix4().makeRotationY(Math.PI / 2));
+    circleEnd.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2 + phi));
+    circleEnd.applyMatrix(new THREE.Matrix4().setPosition(new THREE.Vector3(Math.cos(phi), Math.sin(phi), 0)));
+
+    let geometry = new THREE.Geometry();
+    geometry.merge(torusGeometry);
+    geometry.merge(circleStart);
+    geometry.merge(circleEnd);
+
+    this.geometry = geometry;
+}
+
+export function polyhedron(data) {
+    let phi = data.phi * Math.PI / 180;
+    let polyhedron = new THREE.SphereGeometry(1, 2, 8, 0, phi);
+
+    let semiStart = new THREE.CircleGeometry(1, 8, 0, Math.PI);
+    semiStart.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
+    semiStart.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
+
+    let semiEnd = new THREE.CircleGeometry(1, 8, 0, Math.PI);
+    semiEnd.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
+    semiEnd.applyMatrix(new THREE.Matrix4().makeRotationY(phi));
+
+    let geometry = new THREE.Geometry();
+    geometry.merge(polyhedron);
+    geometry.merge(semiStart);
+    geometry.merge(semiEnd);
+
+    this.geometry = geometry;
+}
