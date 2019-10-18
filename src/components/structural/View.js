@@ -279,7 +279,7 @@ class View extends Component {
                             return this.helper(this.props.objects[it]);
                         })
                     }
-
+                    <a-entity geometry="primitive: phisphere; phi: 270" position="0 1 0" class="negative" material="transparent: true; opacity: 0;" csg-meshs=""></a-entity>
                     {this.props.sceneConfig.settings.camConfig === 1 ?
                         <a-entity position="0 0 0">
                             <a-cylinder checkpoint radius="1" height="0.3" position="-25 1 -25" color="#39BB82"></a-cylinder>
