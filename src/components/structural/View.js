@@ -7,6 +7,7 @@ import "aframe-physics-system";
 import "aframe-environment-component";
 import "aframe-csg-meshs";
 import * as THREE from "three";
+import * as PhiGeometries from "./geometries/phiGeometries.js";
 
 /**
  * @summary - The View component return the aframe representation of the scene. This
@@ -50,26 +51,28 @@ class View extends Component {
             schema : {
                 phi : { default : 360, min : 0, type : "int" },
             },
-        
-            init : function(data) {
-                let phi = data.phi * Math.PI / 180;
-                let sphere = new THREE.SphereGeometry(1, 18, 36, 0, phi);
-        
-                let semiStart = new THREE.CircleGeometry(1, 36, 0, Math.PI);
-                semiStart.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
-                semiStart.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
-        
-                let semiEnd = new THREE.CircleGeometry(1, 32, 0, Math.PI);
-                semiEnd.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
-                semiEnd.applyMatrix(new THREE.Matrix4().makeRotationY(phi));
-        
-                let geometry = new THREE.Geometry();
-                geometry.merge(sphere);
-                geometry.merge(semiStart);
-                geometry.merge(semiEnd);
-        
-                this.geometry = geometry;
-            }
+            init : PhiGeometries.sphere
+        });
+
+        this.AFRAME.registerGeometry("phicylinder", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.cylinder
+        });
+
+        this.AFRAME.registerGeometry("phitorus", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.torus
+        });
+
+        this.AFRAME.registerGeometry("phipolyhedron", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.polyhedron
         });
     }
     // This fires off an event when the system is fully rendered.
