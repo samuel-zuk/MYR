@@ -6,7 +6,9 @@ import "three-pathfinding/dist/three-pathfinding";
 import "aframe-extras/dist/aframe-extras.min.js";
 import "aframe-physics-system";
 import "aframe-environment-component";
+import "aframe-csg-meshs";
 import * as THREE from "three";
+import * as PhiGeometries from "./geometries/phiGeometries.js";
 
 /**
  * @summary - The View component return the aframe representation of the scene. This
@@ -19,6 +21,7 @@ class View extends Component {
         this.state = {
             welcomeOpen: true
         };
+        this.AFRAME = window.AFRAME;
     }
     intervalID = 0;
 
@@ -43,6 +46,34 @@ class View extends Component {
 
         window.addEventListener("exit-vr", () => {
             document.getElementById("interface").style.visibility = "visible";
+        });
+
+        this.AFRAME.registerGeometry("phisphere", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.sphere
+        });
+
+        this.AFRAME.registerGeometry("phicylinder", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.cylinder
+        });
+
+        this.AFRAME.registerGeometry("phitorus", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.torus
+        });
+
+        this.AFRAME.registerGeometry("phipolyhedron", {
+            schema : {
+                phi : { default : 360, min : 0, type : "int" },
+            },
+            init : PhiGeometries.polyhedron
         });
     }
     // This fires off an event when the system is fully rendered.
@@ -172,8 +203,7 @@ class View extends Component {
             <a-entity id="rig" movement-controls="controls: checkpoint" checkpoint-controls="mode: animate">
                 <a-camera
                     position={this.props.sceneConfig.settings.cameraPosition}
-                    look-controls="pointerLockEnabled: true"
-                >
+                    look-controls="pointerLockEnabled: true">
                     <a-cursor
                         position="0 0 -1"
                         geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03;"

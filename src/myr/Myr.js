@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 import "aframe";
 import "aframe-physics-system";
+import "aframe-csg-meshs";
 import Group from "./Group";
 import CANNON from "cannon";
 =======
@@ -69,10 +70,10 @@ class Myr {
 
         // For each function bind it to the window
         funs.forEach(element => {
-            // If a collision is detected then do not override and warn
+        // If a collision is detected then do not override and warn
             if (window.hasOwnProperty(element)) {
                 console.warn(`The ${element} of Myr is being overridden.\n` +
-                    "If this was not intentional consider renaming the function.");
+            "If this was not intentional consider renaming the function.");
             } else {
                 // Collision free so we can bind to window
                 window[element] = this[element];
@@ -397,6 +398,8 @@ class Myr {
         return this.cursor.phiLength;
     };
 
+    //test=()=>{console.log(this.els);};
+
     setLoop = (i) => {
         this.cursor.loop = Boolean(i);
         return this.cursor.loop;
@@ -490,16 +493,6 @@ class Myr {
         return outerElId;
     }
 
-    // Disallows the entity to be pushed
-    makeUnPushable = (outerElId) => {
-        let el = this.getEl(outerElId);
-        if (el["force-pushable"]) {
-            el["dynamic-body"] = null;
-            el["force-pushable"] = "false";
-        }
-        return outerElId;
-    }
-
     push = (outerElId, x, y, z) => {
         // Add an event listener
         document.addEventListener("myr-view-rendered", () => {
@@ -517,6 +510,46 @@ class Myr {
         return outerElId;
     }
 
+    // Makes the entity subtract from entities it overlaps with
+    makeSubtractive = (outerElId) => {
+        let el = this.getEl(outerElId);
+        if (String(el.id).includes("grp")) {
+            for (let i in el.els) {
+                let innerEl = el.els[i];
+                innerEl["mixin"] = "subtractive-entity";
+                innerEl["class"] = "negative";
+            }
+            return outerElId;
+        }
+        else {
+            el["mixin"] = "subtractive-entity";
+            el["class"] = "negative";
+            return outerElId;
+        }
+    }
+
+    // Gives the entity normal additive geometry properties based on current cursor state
+    makeUnSubtractive = (outerElId) => {
+        let el = this.getEl(outerElId);
+        if (String(el.id).includes("grp")) {
+            for (let i in el.els) {
+                let innerEl = el.els[i];
+                if (innerEl["class"]) {
+                    delete innerEl["class"];
+                    innerEl["mixin"] = "additive-entity";
+                }
+            }
+            return outerElId;
+        }
+        else {
+            if (el["class"]) {
+                delete el["class"];
+                el["mixin"] = "additive-entity";
+            }
+            return outerElId;
+        }
+    }
+
     // Render an Aframe Box Primitive with current Myr settings
     box = (params) => {
         let base = {
@@ -526,6 +559,7 @@ class Myr {
             position: { ...this.cursor.position },
             rotation: this.cursor.rotation,
             scale: this.cursor.scale,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -539,6 +573,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -552,6 +587,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -565,6 +601,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -579,6 +616,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -592,6 +630,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -605,6 +644,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -619,6 +659,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -631,6 +672,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -644,6 +686,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -656,6 +699,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -669,6 +713,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -681,6 +726,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color}; side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -703,6 +749,7 @@ class Myr {
             position: this.cursor.position,
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
+            mixin: "additive-entity",
         };
         if (!params || typeof params === "string") {
             this.els[base.id] = { ...base };
@@ -720,6 +767,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -734,6 +782,7 @@ class Myr {
             material: `color: ${this.cursor.color}; side: double`,
             p: 2,
             q: 3,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -746,6 +795,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -760,6 +810,7 @@ class Myr {
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
             material: `color: ${this.cursor.color};  side: double;`,
+            mixin: "additive-entity",
         };
         return this.mergeProps(base, params);
     }
@@ -778,10 +829,10 @@ class Myr {
     }
 
     // Prism is an alias for Polyhedron
-    prism = this.polyhedron
+    prism = this.polyhedron;
 
     // Cube is an alias for Box
-    cube = this.box
+    cube = this.box;
 
 
     /********************* ANIMATIONS *********************/
@@ -793,12 +844,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: rotation;
-      dir: alternate;
-      to: ${el.rotation.x} ${el.rotation.y + magnitude} ${el.rotation.z};
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-    `;
+        property: rotation;
+        dir: alternate;
+        to: ${el.rotation.x} ${el.rotation.y + magnitude} ${el.rotation.z};
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        `;
         el.animation = anim;
         return outerElId;
     };
@@ -809,13 +860,13 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: rotation;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      easing: linear;
-      to: ${el.rotation.x} ${el.rotation.y + magnitude} ${el.rotation.z};
-    `;
+        property: rotation;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        easing: linear;
+        to: ${el.rotation.x} ${el.rotation.y + magnitude} ${el.rotation.z};
+        `;
         el.animation__spin = anim;
         return outerElId;
     };
@@ -826,12 +877,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x} ${el.position.y + magnitude} ${el.position.z};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x} ${el.position.y + magnitude} ${el.position.z};
+        `;
         el.animation__yoyo = anim;
         return outerElId;
     };
@@ -842,12 +893,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      property: position;
-      to: ${el.position.x + magnitude} ${el.position.y} ${el.position.z};
-    `;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        property: position;
+        to: ${el.position.x + magnitude} ${el.position.y} ${el.position.z};
+        `;
         el.position = { ...el.position, x: el.position.x - magnitude };
         el.animation__sidetoside = anim;
         return outerElId;
@@ -859,12 +910,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x} ${el.position.y + magnitude} ${el.position.z};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x} ${el.position.y + magnitude} ${el.position.z};
+        `;
         el.animation__goup = anim;
         return outerElId;
     };
@@ -875,12 +926,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x} ${el.position.y - magnitude} ${el.position.z};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x} ${el.position.y - magnitude} ${el.position.z};
+        `;
         el.animation__godown = anim;
         return outerElId;
     };
@@ -891,12 +942,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x - magnitude} ${el.position.y} ${el.position.z};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x - magnitude} ${el.position.y} ${el.position.z};
+        `;
         el.animation__goleft = anim;
         return outerElId;
     };
@@ -907,12 +958,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x + magnitude} ${el.position.y} ${el.position.z};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x + magnitude} ${el.position.y} ${el.position.z};
+        `;
         el.animation__goright = anim;
         return outerElId;
     };
@@ -923,12 +974,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x} ${el.position.y} ${el.position.z + magnitude};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x} ${el.position.y} ${el.position.z + magnitude};
+        `;
         el.animation__goleft = anim;
         return outerElId;
     };
@@ -939,12 +990,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: position;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.position.x} ${el.position.y} ${el.position.z - magnitude};
-    `;
+        property: position;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.position.x} ${el.position.y} ${el.position.z - magnitude};
+        `;
         el.animation__goaway = anim;
         return outerElId;
     };
@@ -955,12 +1006,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: scale;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.scale.x * magnitude} ${el.scale.y * magnitude} ${el.scale.z * magnitude};
-    `;
+        property: scale;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.scale.x * magnitude} ${el.scale.y * magnitude} ${el.scale.z * magnitude};
+        `;
         el.animation__grow = anim;
         return outerElId;
     };
@@ -971,12 +1022,12 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: scale;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      to: ${el.scale.x / magnitude} ${el.scale.y / magnitude} ${el.scale.z / magnitude};
-    `;
+        property: scale;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        to: ${el.scale.x / magnitude} ${el.scale.y / magnitude} ${el.scale.z / magnitude};
+        `;
         el.animation__shrink = anim;
         return outerElId;
     };
@@ -987,14 +1038,14 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: components.material.material.opacity;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      isRawProperty: true;
-      from: 1;
-      to: ${magnitude};
-    `;
+        property: components.material.material.opacity;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        isRawProperty: true;
+        from: 1;
+        to: ${magnitude};
+        `;
         el.material = el.material + "; transparent: true;";
         el.animation__fadeout = anim;
         return outerElId;
@@ -1006,14 +1057,14 @@ class Myr {
         duration = duration !== null ? duration : this.cursor.duration;
         let el = this.getEl(outerElId);
         let anim = `
-      property: components.material.material.opacity;
-      dir: alternate;
-      dur: ${duration};
-      loop: ${Boolean(loop)};
-      isRawProperty: true;
-      from: 0;
-      to: ${magnitude};
-    `;
+        property: components.material.material.opacity;
+        dir: alternate;
+        dur: ${duration};
+        loop: ${Boolean(loop)};
+        isRawProperty: true;
+        from: 0;
+        to: ${magnitude};
+        `;
         el.material = el.material + "; transparent: true;";
         el.animation__fadein = anim;
         return outerElId;
@@ -1146,8 +1197,8 @@ class Myr {
                 el.setAttribute(type, newParam);
             } catch (error) {
                 return Error("change() failed execution" +
-                    "Ensure you are passing the proper id to the method" +
-                    `Error msg: ${error}`);
+            "Ensure you are passing the proper id to the method" +
+            `Error msg: ${error}`);
             }
         });
     }
@@ -1158,8 +1209,8 @@ class Myr {
             el.setAttribute(type, newParam);
         } catch (error) {
             let err = Error("syncChange() failed execution\n" +
-                "Ensure you are passing the proper id to the method" +
-                `Error msg: ${error}`);
+            "Ensure you are passing the proper id to the method" +
+            `Error msg: ${error}`);
             console.error(err);
             return err;
         }

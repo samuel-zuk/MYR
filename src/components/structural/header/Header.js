@@ -129,8 +129,8 @@ class Header extends Component {
     * @param {event} e - event from the keystroke.
     */
     handleKeyDown(e) {
-        //metaKey is cmd and windows key in some browsers
         if (this.props.layoutType !== layoutTypes.REFERENCE) {
+            //metaKey is cmd and windows key in some browsers
             if ((e.ctrlKey || e.metaKey) && (e.key === "Enter" || e.key === "Return")) {
                 //ctrl/cmd + enter renders the scene
                 e.preventDefault();
@@ -174,7 +174,7 @@ class Header extends Component {
     */
     logout = () => {
         auth.signOut().then(() => {
-            // sync with application state
+        // sync with application state
             this.props.logging.logout();
             this.setState({ logMenuOpen: false });
         });
@@ -228,7 +228,7 @@ class Header extends Component {
                             padding: 2,
                             border: "1px solid #fff"
                         }}>
-                        Log In
+                Log In
                     </Button>
                 }
             </div>
@@ -305,7 +305,7 @@ class Header extends Component {
         const { match } = this.props;
         let projectId = (match && match.params && match.params.id) || null;
         if (!projectId || !this.props.scene.id || this.state.needsNewId) {
-            // Generate a new projectId
+        // Generate a new projectId
             projectId = scenes.doc().id;
         }
         return projectId;
@@ -330,11 +330,11 @@ class Header extends Component {
     handleSave = () => {
         let editor, text;
         if (!this.props.viewOnly) {
-            //If in editor mode, gets text directly from editor
+        //If in editor mode, gets text directly from editor
             editor = window.ace.edit("ace-editor");
             text = editor.getSession().getValue();
         } else {
-            //Otherwise, gets text from state (should be up to date since it is refreshed on editor unmount) 
+        //Otherwise, gets text from state (should be up to date since it is refreshed on editor unmount) 
             text = this.props.text;
         }
 
@@ -377,7 +377,7 @@ class Header extends Component {
                 this.setState({ spinnerOpen: false });
             });
         } else {
-            // TODO: Don't use alert
+        // TODO: Don't use alert
             alert("We were unable to save your project. Are you currently logged in?");
         }
 
@@ -511,7 +511,7 @@ class Header extends Component {
                 message={<span id="message-id">{this.props.message.text}</span>}
                 action={[
                     <Button key="undo" color="secondary" size="small" onClick={this.closeSnackBar}>
-                        Dismiss
+                Dismiss
                     </Button>
                 ]}
             />
@@ -578,7 +578,7 @@ class Header extends Component {
                             color="primary"
                             className="sidebar-btn">
                             <Icon className="material-icons">add</Icon>
-                            Start New
+                Start New
                         </Button>
                         <Button
                             variant="raised"
@@ -587,7 +587,7 @@ class Header extends Component {
                             className="sidebar-btn"
                             disabled={referenceMode}>
                             <Icon className="material-icons">replay</Icon>
-                            Recover
+                Recover
                         </Button>
                         <Button
                             variant="raised"
@@ -596,7 +596,7 @@ class Header extends Component {
                             className="sidebar-btn"
                             disabled={referenceMode}>
                             <Icon className="material-icons">save</Icon>
-                            Save Project
+                Save Project
                         </Button>
                         <Button
                             variant="raised"
@@ -604,7 +604,7 @@ class Header extends Component {
                             color="primary"
                             className="sidebar-btn">
                             <Icon className="material-icons">perm_media</Icon>
-                            Open Project
+                Open Project
                         </Button>
                         <Button
                             variant="raised"
