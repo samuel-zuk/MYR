@@ -145,36 +145,6 @@ class View extends Component {
             }
             if (geometry[0] === "primitive: sphere" && geometry[1] !== "phi-length: 360") {
                 let phiLen = parseInt(geometry[1].split(": ")[1]);
-                AFRAME.registerGeometry("fixedSphere", {
-                    schema: {
-
-                    },
-                    init: () => {
-                        let material = new THREE.MeshBasicMaterial();
-
-                        let sphereGeometry = new THREE.SphereGeometry(ent.scale, 32, 32, 0, phiLen);
-                        let sphereMesh = new THREE.Mesh(sphereGeometry, material);
-
-                        let semi1Geometry = new THREE.CircleGeometry(ent.scale, 32, 0, Math.PI);
-                        let semi1Mesh = new THREE.Mesh(semi1Geometry, material);
-                        semi1Mesh.rotation.z = Math.PI / 2;
-                        semi1Mesh.rotation.x = Math.PI;
-
-                        let semi2Geometry = new THREE.CircleGeometry(ent.scale, 32, 0, Math.PI);
-                        let semi2Mesh = new THREE.Mesh(semi2Geometry, material);
-                        semi2Mesh.rotation.z = Math.PI / 2;
-                        semi2Mesh.rotation.y = phiLen;
-
-                        let geometry = new THREE.Geometry();
-                        sphereMesh.updateMatrix();
-                        geometry.merge(sphereMesh.geometry, sphereMesh.matrix);
-                        semi1Mesh.updateMatrix();
-                        geometry.merge(semi1Mesh.geometry, semi1Mesh.matrix);
-                        semi2Mesh.updateMatrix();
-                        geometry.merge(semi2Mesh.geometry, semi2Mesh.matrix);
-                        this.geometry = geometry;
-                    }
-                });
                 return <a-entity key={ent.id} {...flattened} geometry="primitive: fixedSphere"></a-entity>;
             }
             return <a-entity key={ent.id} {...flattened}></a-entity>;
