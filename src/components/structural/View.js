@@ -5,6 +5,7 @@ import "three-pathfinding/dist/three-pathfinding";
 import "aframe-extras/dist/aframe-extras.min.js";
 import "aframe-physics-system";
 import "aframe-environment-component";
+import "aframe-csg-meshs";
 import * as THREE from "three";
 
 /**
@@ -229,6 +230,8 @@ class View extends Component {
                     <a-assets>
                         <a-mixin id="checkpoint"></a-mixin>
                         <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
+                        <a-mixin id="additive-entity" csg-meshs="subtract: .negative" material="transparent: false; opacity 1;"></a-mixin>
+                        <a-mixin id="subtractive-entity" material="transparent: true; opacity: 0;" static-body="shape: none" csg-meshs=""></a-mixin>
                         <a-img id="reference" src={`${process.env.PUBLIC_URL}/img/coordHelper.jpg`} />
                         {this.props.assets ? this.props.assets.map((x) => this.assetsHelper(x)) : null}
                     </a-assets>
