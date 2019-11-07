@@ -54,6 +54,12 @@ class CourseSelectModal extends Component {
             difficultyFilter : {},
             categoryFilter : {},
         };
+        for(let i in this.difficulties) {
+            this.state.difficultyFilter[this.difficulties[i]] = true;
+        }
+        for(let i in this.categories) {
+            this.state.categoryFilter[this.categories[i]] = true;
+        }
     }
 
     convertCamelCase = (text) => {
@@ -260,14 +266,13 @@ class CourseSelectModal extends Component {
                         <div className="row" id="courses">
                             { // Sort the users projects in alphabetical order 
                                 courses.length !== 0 ?
-                                    () => {
-                                        return courses.sort(function (a, b) {
-                                            return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-                                        }).map(course => {
-                                            return this.helper(course);
-                                        });
-                                    } : 
-                                    () => { return (<Typography variant="caption" display="block" gutterBottom>No Courses Found</Typography>); }
+                                    courses.sort(function (a, b) {
+                                        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+                                    }).map(course => {
+                                        return this.helper(course);
+                                    })
+                                    : 
+                                    <Typography variant="caption" display="block" gutterBottom>No Courses Found</Typography>
                             }
                         </div>
                     </div>
