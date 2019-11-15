@@ -58,7 +58,7 @@ class CourseSelectModal extends Component {
             this.state.difficultyFilter[this.difficulties[i]] = true;
         }
         for(let i in this.categories) {
-            this.state.categoryFilter[this.categories[i]] = true;
+            this.state.categoryFilter[this.categories[i]] = false;
         }
     }
 
@@ -73,14 +73,22 @@ class CourseSelectModal extends Component {
     }  
 
     helper = (course) => {
-        let anyCategorySelected = (arr) => {
+        /*let anyCategorySelected = (arr) => {
             let hasBeenSelected = false;
             for(let i = 0; i < arr.length; i++) {
                 hasBeenSelected = this.state.categoryFilter[arr[i]] ? true : false;
             }
             return hasBeenSelected;
+        };*/
+        let allCategoriesSelected = (arr) => {
+            for(let key in this.state.categoryFilter) {
+                if(this.state.categoryFilter[key] && !(arr.includes(key))) {
+                    return false;
+                }
+            }
+            return true;
         };
-        if (course && this.state.difficultyFilter[this.difficulties[course.difficulty]] && anyCategorySelected(course.categories)) {
+        if (course && this.state.difficultyFilter[this.difficulties[course.difficulty]] && allCategoriesSelected(course.categories)) {
             let id = course._id;
             let shortname = course.shortname;
             let name = course.name;
@@ -210,7 +218,7 @@ class CourseSelectModal extends Component {
                         </ButtonBase >
                         <h3 className="col-12 p-0 mb-3 border-bottom">Available Courses</h3>
                         <div id="filters" className="border-bottom">
-                            <h5>Difficulty: </h5>
+                            <h5>Difficulties: </h5>
                             <Grid container spacing={3}>
                                 <Grid item xs={8}>
                                     <div>
