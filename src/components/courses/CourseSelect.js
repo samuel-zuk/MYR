@@ -11,6 +11,10 @@ import {
     Tooltip,
     Typography,
     Grid,
+    FormControl,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
 } from "@material-ui/core";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -48,15 +52,12 @@ const modelStyles = theme => ({
 class CourseSelectModal extends Component {
     constructor(props) {
         super(props);
-        this.difficulties = ["beginner", "intermediate", "advanced", "expert"];
+        this.difficulties = ["allDifficulties", "beginner", "intermediate", "advanced", "expert"];
         this.categories = ["geometry", "transformations", "animations", "groups", "firstTimer", "teachers", "misc"];
         this.state = {
-            difficultyFilter : {},
+            selectedDifficulty : "allDifficulties",
             categoryFilter : {},
         };
-        for(let i in this.difficulties) {
-            this.state.difficultyFilter[this.difficulties[i]] = true;
-        }
         for(let i in this.categories) {
             this.state.categoryFilter[this.categories[i]] = false;
         }
@@ -72,15 +73,9 @@ class CourseSelectModal extends Component {
         }
     }  
 
-    helper = (course) => {
-        /*let anyCategorySelected = (arr) => {
-            let hasBeenSelected = false;
-            for(let i = 0; i < arr.length; i++) {
-                hasBeenSelected = this.state.categoryFilter[arr[i]] ? true : false;
-            }
-            return hasBeenSelected;
-        };*/
-        let allCategoriesSelected = (arr) => {
+    courseHelper = (course) => {
+        let allCategoriesSelected = () => {
+            let arr = course.categories;
             for(let key in this.state.categoryFilter) {
                 if(this.state.categoryFilter[key] && !(arr.includes(key))) {
                     return false;
@@ -88,12 +83,23 @@ class CourseSelectModal extends Component {
             }
             return true;
         };
-        if (course && this.state.difficultyFilter[this.difficulties[course.difficulty]] && allCategoriesSelected(course.categories)) {
+        let isDifficultySelected = () => {
+            if(this.state.selectedDifficulty === "allDifficulties") {
+                return true;
+            }
+            else if(this.difficulties[course.difficulty + 1] === this.state.selectedDifficulty) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+        if (course && isDifficultySelected() && allCategoriesSelected()) {
             let id = course._id;
             let shortname = course.shortname;
             let name = course.name;
             let description = course.description;
-            let difficulty = this.convertCamelCase(this.difficulties[course.difficulty]);
+            let difficulty = this.convertCamelCase(this.difficulties[course.difficulty + 1]);
             let categories = course.categories.length > 0 ? course.categories.map(this.convertCamelCase).join(", ") : "None";
             let link = "/course/" + shortname;
             return (
@@ -127,11 +133,10 @@ class CourseSelectModal extends Component {
         }
     }
 
-    setFilterValue = (val, key, type) => {
-        //console.log(val + key + type);
+    setFilterValue = (type, val, key) => {
         if (type === "difficulty") {
             let newState = this.state;
-            newState.difficultyFilter[key] = val;
+            newState.selectedDifficulty = val;
             this.setState(newState);
         }
         else if (type === "category") {
@@ -141,37 +146,20 @@ class CourseSelectModal extends Component {
         }
     }
 
-    setAllFilters = (value, type) => {
-        switch(type){
-            case "difficulty":
-                for(let i in this.difficulties) {
-                    this.setFilterValue(value , this.difficulties[i], "difficulty");
-                }    
-                break;
-            case "category":
-                for(let i in this.categories) {
-                    this.setFilterValue(value , this.categories[i], "category");
-                }    
-                break;
-            default:
-        }   
+    resetCategories = () => {
+        for(let i in this.categories) {
+            this.setFilterValue("category", false , this.categories[i]);
+        }
     }
 
-    filterHelper = (key, type) => {
+    categoryHelper = (key) => {
         if (key) {
-            //converts camelCase difficulty/category filters keys into Mixed Case button labels
             let buttonText = this.convertCamelCase(key);
-            let filter;
-            if (type === "difficulty") {
-                filter = this.state.difficultyFilter;
-            }
-            else if (type === "category") {
-                filter = this.state.categoryFilter;
-            }
+            let filter = this.state.categoryFilter;
             return(
                 <Button
                     variant={filter[key] ? "contained" : "outlined"}
-                    onClick={() => { this.setFilterValue(!filter[key], key, type); }}
+                    onClick={() => { this.setFilterValue("category", !filter[key], key); }}
                     size="small">
                     {buttonText}
                 </Button>
@@ -179,6 +167,24 @@ class CourseSelectModal extends Component {
         }
         else {
             return null;
+        }
+    }
+
+    updateDifficulty = event => {
+        this.setFilterValue("difficulty", event.target.value);
+    }
+    
+    difficultyHelper = (key) => {
+        if(key) {
+            let labelText = this.convertCamelCase(key);
+            return (
+                <FormControlLabel
+                    value={key}
+                    control={<Radio></Radio>}
+                    checked={this.state.selectedDifficulty === key}
+                    label={labelText}>
+                </FormControlLabel>
+            );
         }
     }
 
@@ -219,55 +225,33 @@ class CourseSelectModal extends Component {
                         <h3 className="col-12 p-0 mb-3 border-bottom">Available Courses</h3>
                         <div id="filters" className="border-bottom">
                             <h5>Difficulties: </h5>
-                            <Grid container spacing={3}>
-                                <Grid item xs={8}>
-                                    <div>
-                                        {
-                                            this.difficulties.map(i => { return this.filterHelper(i, "difficulty"); })
+                            <FormControl component="fieldset">
+                                <RadioGroup defaultValue="allDifficulties" value={this.state.selectedDifficulty} onChange={this.updateDifficulty} row>
+                                    {
+                                        this.difficulties.map(i => { return this.difficultyHelper(i); })
+                                    }   
                                         }
-                                    </div>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Button
-                                        onClick={() => { this.setAllFilters(true, "difficulty"); }}
-                                        size="small">
-                                        Select All
-                                    </Button>
-                                    <Button
-                                        onClick={() => { this.setAllFilters(false, "difficulty"); }}
-
-                                        size="small">
-                                        Deselect All
-                                    </Button>                            
-                                </Grid>
-                            </Grid>
+                                    }   
+                                </RadioGroup>
+                            </FormControl>
                             <br></br>
                             <Grid container spacing={3}>
-                                <Grid item xs={8}>
+                                <Grid item xs={10}>
                                     <h5>Categories: </h5>
                                 </Grid>
-                            </Grid>
-                            <Grid container spacing={3}>
-                                <Grid item xs={8}>
-                                    <div>
-                                        {
-                                            this.categories.map(i => { return this.filterHelper(i, "category"); })
-                                        }
-                                    </div>
-                                </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={2}>
                                     <Button
-                                        onClick={() => { this.setAllFilters(true, "category"); }}
+                                        onClick={() => { this.resetCategories(); }}
                                         size="small">
-                                        Select All
-                                    </Button>
-                                    <Button
-                                        onClick={() => { this.setAllFilters(false, "category"); }}
-                                        size="small">
-                                        Deselect All
+                                        Reset Filters
                                     </Button>
                                 </Grid>
                             </Grid>
+                            <div>
+                                {
+                                    this.categories.map(i => { return this.categoryHelper(i); })
+                                }
+                            </div>
                             <br></br>
                         </div>
                         <br></br>
@@ -277,7 +261,7 @@ class CourseSelectModal extends Component {
                                     courses.sort(function (a, b) {
                                         return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
                                     }).map(course => {
-                                        return this.helper(course);
+                                        return this.courseHelper(course);
                                     })
                                     : 
                                     <Typography variant="caption" display="block" gutterBottom>No Courses Found</Typography>
