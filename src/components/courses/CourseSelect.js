@@ -230,8 +230,6 @@ class CourseSelectModal extends Component {
                                     {
                                         this.difficulties.map(i => { return this.difficultyHelper(i); })
                                     }   
-                                        }
-                                    }   
                                 </RadioGroup>
                             </FormControl>
                             <br></br>
