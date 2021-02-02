@@ -6,6 +6,12 @@ import * as sceneActions from "./sceneActions";
 
 const courseRef = "/apiv1/courses/";
 const header = { headers: { "content-type": "application/json" } };
+let noLessons = {
+    name: "",
+    id: -1,
+    prompt: "There are no lessons in this course",
+    code: ""
+};
 const problem = {
     name: "Error",
     id: -1,
@@ -13,7 +19,9 @@ const problem = {
     code: ""
 };
 
-//Course Actions
+/**
+ * Course Actions
+ */
 export function fetchCourses() {
     return (dispatch) => {
         fetch(courseRef, header)
@@ -44,15 +52,24 @@ export function fetchCourse(courseId) {
             .then(response => {
                 response.json()
                     .then(json => {
+                        document.title = json.name + " Course | MYR";
                         dispatch(loadCourse(json));
-                        dispatch(loadLesson(json.lessons[0]));
+
+                        //Make sure that the course is not empty
+                        if(json.lessons.length <= 0){
+                            noLessons.name = json.name; 
+                            dispatch(loadLesson(noLessons));
+                            return;
+                        }
+
+                        dispatch(loadLesson(json.lessons[0] || ""));
                         dispatch(render(json.lessons[0].code || ""));
                         dispatch(updateSavedText(json.lessons[0].code || ""));
                         dispatch(sceneActions.setNameDesc(
                             {
                                 name: json.lessons[0].name,
                                 desc: "This scene was saved from the course: " + json.name
-                            }));
+                            }));   
                     })
                     .catch(err => {
                         console.error(err);
@@ -73,7 +90,9 @@ export function loadCourse(course) {
     };
 }
 
-//Lesson Actions
+/**
+ * Lesson Actions
+ */
 export function fetchLesson(json) {
     return (dispatch) => {
         dispatch(loadLesson(json));
@@ -83,7 +102,12 @@ export function fetchLesson(json) {
     };
 }
 
-// Frontend disables option if out of bounds
+/**
+ * Frontend disables option if out of bounds
+ * 
+ * @param {*} currentIndex !!!DESCRIPTION NEEDED!!!
+ * @param {*} next !!!DESCRIPTION NEEDED!!!
+ */
 export function nextLesson(currentIndex, next) {
     return (dispatch) => {
         dispatch(setCurrentIndex(currentIndex + 1));
@@ -91,7 +115,12 @@ export function nextLesson(currentIndex, next) {
     };
 }
 
-// Frontend disables option if out of bounds
+/**
+ * Frontend disables option if out of bounds
+ * 
+ * @param {*} currentIndex !!!DESCRIPTION NEEDED!!!
+ * @param {*} prev !!!DESCRIPTION NEEDED!!!
+ */
 export function previousLesson(currentIndex, prev) {
     return (dispatch) => {
         dispatch(setCurrentIndex(currentIndex - 1));

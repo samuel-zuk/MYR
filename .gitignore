@@ -8,19 +8,23 @@
 
 # production
 /build
+/docs/*
+!docs/.gitkeep
 
 # api keys
 /src/keys
 
+# doc scripts
+GenerateDocsWindows.bat
+
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
+!.env.example
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vscode
-package-lock.json
+!package-lock.json
+yarn.lock
