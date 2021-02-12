@@ -118,6 +118,26 @@ class View extends Component {
             if (ent.tube) {
                 return <a-tube path={ent.path} radius={ent.radius} material={ent.material}></a-tube>;
             }
+            // if the entity has subtractive properties & can be rendered via phiLength as an 
+            // unclosed shape, it will break CSG & must be replaced with a fixed geometry
+            if (ent.class && ent.class === "negative") { 
+                const shouldReplaceGeometries = ["sphere", "torus", "polyhedron", "cylinder"];
+                let which;
+                if (shouldReplaceGeometries.some((geometry, index) => {
+                    let substr = "primitive: " + geometry;
+                    which = index;
+                    return ent.geometry.includes(substr);
+                })) {
+                    let oldGeometry = shouldReplaceGeometries[which];
+                    let newGeometry = "phi" + oldGeometry;
+                    flattened.geometry = flattened.geometry.replace(oldGeometry, newGeometry);
+                    let i = flattened.material.search("opacity: ");
+                    if(i !== -1) {
+                        flattened.material = flattened.material.slice(0, i) + "opacity: 0;";
+                    }
+                }
+                return <a-entity key={ent.id} {...flattened}></a-entity>;
+            }
             return <a-entity key={ent.id} {...flattened}></a-entity>;
         }
     }
@@ -236,8 +256,8 @@ class View extends Component {
                     <a-assets>
                         <a-mixin id="checkpoint"></a-mixin>
                         <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
-                        <a-mixin id="additive-entity" csg-meshs="subtract: .negative" material="transparent: false; opacity 1;"></a-mixin>
-                        <a-mixin id="subtractive-entity" material="transparent: true; opacity: 0;" static-body="shape: none" csg-meshs=""></a-mixin>
+                        <a-mixin id="additive-entity" csg-meshs="subtract: .negative"></a-mixin>
+                        <a-mixin id="subtractive-entity" static-body="shape: none" csg-meshs=""></a-mixin>
                         <a-img id="reference" src={`${process.env.PUBLIC_URL}/img/coordHelper.jpg`} />
                         {this.props.assets ? this.props.assets.map((x) => this.assetsHelper(x)) : null}
                     </a-assets>

@@ -702,7 +702,12 @@ class Myr {
         return outerElId;
     }
 
-    // Makes the entity subtract from entities it overlaps with
+    /**
+     * Gives the entity the subtractive property
+     * 
+     * @param {number} outerElId The entity id of the object being given
+     * the subtractive property
+     */
     makeSubtractive = (outerElId) => {
         let el = this.getEl(outerElId);
         if (String(el.id).includes("grp")) {
@@ -720,7 +725,12 @@ class Myr {
         }
     }
 
-    // Gives the entity normal additive geometry properties based on current cursor state
+    /**
+     * Removes the subtractive property from an element
+     * 
+     * @param {number} outerElId The entity id of the object remove the 
+     * subtractive property from
+     */
     makeUnSubtractive = (outerElId) => {
         let el = this.getEl(outerElId);
         if (String(el.id).includes("grp")) {
@@ -820,7 +830,7 @@ class Myr {
     cylinder = (params) => {
         let base = {
             id: "cyl" + this.genNewId(),
-            geometry: `primitive: cylinder; radius: ${this.cursor.radius}; theta-length: ${this.cursor.phiLength}; opacity: ${1 - this.cursor.transparency};`,
+            geometry: `primitive: cylinder; radius: ${this.cursor.radius}; thetaLength: ${this.cursor.phiLength}; opacity: ${1 - this.cursor.transparency};`,
             position: this.cursor.position,
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
@@ -929,7 +939,7 @@ class Myr {
     polyhedron = (params) => {
         let base = {
             id: "poly" + this.genNewId(),
-            geometry: `primitive: sphere; segmentsWidth: 2; segmentsHeight: 8; phi-length: ${this.cursor.phiLength}; opacity: ${1 - this.cursor.transparency};`,
+            geometry: `primitive: sphere; segmentsWidth: 2; segmentsHeight: 8; phiLength: ${this.cursor.phiLength}; opacity: ${1 - this.cursor.transparency};`,
             position: this.cursor.position,
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
@@ -964,7 +974,7 @@ class Myr {
     sphere = (params) => {
         let base = {
             id: "sphere" + this.genNewId(),
-            geometry: `primitive: sphere; phi-length: ${this.cursor.phiLength}`,
+            geometry: `primitive: sphere; phiLength: ${this.cursor.phiLength}`,
             position: this.cursor.position,
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,
@@ -1029,7 +1039,7 @@ class Myr {
     torus = (params) => {
         let base = {
             id: "torus" + this.genNewId(),
-            geometry: `primitive: torus; radius: ${this.cursor.radius}; radiusTubular: 0.5; arc: 360; arc: ${this.cursor.phiLength};`,
+            geometry: `primitive: torus; radius: ${this.cursor.radius}; radiusTubular: 0.5; arc: ${this.cursor.phiLength};`,
             position: this.cursor.position,
             scale: this.cursor.scale,
             rotation: this.cursor.rotation,

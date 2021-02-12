@@ -1,12 +1,10 @@
 import AFRAME from "aframe";
 import * as THREE from "three";
 
-let phiSchema = { phi : { default : 360, min : 0, type : "int"}};
-
 AFRAME.registerGeometry("phisphere", {
-    schema : phiSchema,
+    schema : { phiLength : { default : 360, min : 0, type : "int"}},
     init : function(data) {
-        let phi = data.phi * Math.PI / 180;
+        let phi = data.phiLength * Math.PI / 180;
         let sphere = new THREE.SphereGeometry(1, 18, 36, 0, phi);
 
         let semiStart = new THREE.CircleGeometry(1, 36, 0, Math.PI);
@@ -27,9 +25,9 @@ AFRAME.registerGeometry("phisphere", {
 });
 
 AFRAME.registerGeometry("phicylinder", {
-    schema : phiSchema,
+    schema : { thetaLength : { default : 360, min : 0, type : "int"}},
     init : function(data) {
-        let phi = data.phi * Math.PI / 180;
+        let phi = data.thetaLength * Math.PI / 180;
         let cylinder = new THREE.CylinderGeometry(1, 1, 1, 36, 18, false, 0, phi);
 
         let rectStart = new THREE.PlaneGeometry(1, 1);
@@ -50,9 +48,9 @@ AFRAME.registerGeometry("phicylinder", {
 });
 
 AFRAME.registerGeometry("phitorus", {
-    schema : phiSchema,
+    schema : { arc : { default : 360, min : 0, type : "int"}},
     init : function(data) {
-        let phi = data.phi * Math.PI / 180;
+        let phi = data.arc * Math.PI / 180;
         let torusGeometry = new THREE.TorusGeometry(1, 1, 36, 32, phi);
 
         let circleStart = new THREE.CircleGeometry(1, 32, 0, Math.PI * 2);
@@ -74,9 +72,9 @@ AFRAME.registerGeometry("phitorus", {
 });
 
 AFRAME.registerComponent("phipolyhedron", {
-    schema : phiSchema, 
+    schema : { phiLength : { default : 360, min : 0, type : "int"}},
     init : function(data) {
-        let phi = data.phi * Math.PI / 180;
+        let phi = data.phiLength * Math.PI / 180;
         let polyhedron = new THREE.SphereGeometry(1, 2, 8, 0, phi);
 
         let semiStart = new THREE.CircleGeometry(1, 8, 0, Math.PI);
